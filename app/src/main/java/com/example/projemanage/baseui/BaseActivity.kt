@@ -70,7 +70,8 @@ abstract class BaseActivity<T: ViewBinding>: AppCompatActivity() {
                      actionTxt: String? = null,
                      actionListener: View.OnClickListener? = null
     ) {
-        val snackBar = Snackbar.make(binding.root, msg, snackBarLength)
+        val view = findViewById<View>(android.R.id.content).rootView
+        val snackBar = Snackbar.make(view, msg, snackBarLength)
         if (actionTxt != null && actionListener != null) {
             snackBar.setAction(actionTxt, actionListener)
         }
