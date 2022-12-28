@@ -34,5 +34,9 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
         binding.btnSignUp.setOnClickListener {
             Log.d(getTag(), "on sign up click")
             startActivity(Intent(this@IntroActivity, SignUpActivity::class.java)) }
+
+        binding.btnSignIn.setOnClickListener {
+            startActivity(Intent(this, SignInActivity::class.java))
+        }
     }
 }
