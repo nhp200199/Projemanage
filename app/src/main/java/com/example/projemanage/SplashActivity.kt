@@ -1,8 +1,12 @@
 package com.example.projemanage
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.WindowManager
 import com.example.baseproject.baseui.BaseActivity
@@ -16,6 +20,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
+        Handler().postDelayed({
+            startActivity(Intent(this@SplashActivity, IntroActivity::class.java))
+            finish()
+        }, 2000)
     }
 
     override fun getTag(): String {
