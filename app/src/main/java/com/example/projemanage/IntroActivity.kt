@@ -1,7 +1,9 @@
 package com.example.projemanage
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.WindowManager
 import com.example.baseproject.baseui.BaseActivity
@@ -10,7 +12,6 @@ import com.example.projemanage.databinding.ActivityIntroBinding
 class IntroActivity : BaseActivity<ActivityIntroBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_intro)
 
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -30,5 +31,8 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
     }
 
     override fun setViewListener() {
+        binding.btnSignUp.setOnClickListener {
+            Log.d(getTag(), "on sign up click")
+            startActivity(Intent(this@IntroActivity, SignUpActivity::class.java)) }
     }
 }
