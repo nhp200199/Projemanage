@@ -1,10 +1,11 @@
 package com.example.projemanage
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Intent
+import android.text.TextUtils
 import android.view.LayoutInflater
 import com.example.baseproject.baseui.BaseActivity
 import com.example.projemanage.databinding.ActivitySignInBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : BaseActivity<ActivitySignInBinding>() {
     override fun getTag(): String {
@@ -26,6 +27,40 @@ class SignInActivity : BaseActivity<ActivitySignInBinding>() {
 
     override fun setViewListener() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        binding.btnSignIn.setOnClickListener {
+            val email = binding.edtEmail.text.trim().toString()
+            val password = binding.edtPassword.text.trim().toString()
+
+            if (validatedUserInput(email, password)) {
+                showLoadingDialog()
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        hideDialog()
+                        if (task.isSuccessful) {
+                            startActivity(Intent(this@SignInActivity, MainActivity::class.java))
+                            //TODO: clear activity when successfully logged in
+                        } else {
+                            showToast("Error when logging in. ${task.exception?.toString()}")
+                        }
+                    }
+            }
+
+        }
+    }
+
+    private fun validatedUserInput(email: String, password: String): Boolean {
+        return when {
+            TextUtils.isEmpty(email) -> {
+                showToast("empty email field")
+                false
+            }
+            TextUtils.isEmpty(password) -> {
+                showSnackBar("empty password field")
+                false
+            }
+            else -> true
+        }
     }
 
 }

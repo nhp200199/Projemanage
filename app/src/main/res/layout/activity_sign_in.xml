@@ -58,17 +58,20 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/edt_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email" />
 
             <EditText
+                android:id="@+id/edt_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Password" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
