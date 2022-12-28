@@ -1,11 +1,10 @@
 package com.example.projemanage
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import com.example.baseproject.baseui.BaseActivity
 import com.example.projemanage.databinding.ActivitySignUpBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
     override fun getTag(): String {
@@ -29,22 +28,25 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         binding.btnSignUp.setOnClickListener {
-            if (validatedUserInput())
-                signUpAccount()
+            val name = binding.edtName.text.trim { c -> c == ' '}.toString()
+            val email = binding.edtEmail.text.trim { c -> c == ' '}.toString()
+            val password = binding.edtPassword.text.trim { c -> c == ' '}.toString()
+            if (validatedUserInput(name, email, password))
+                signUpAccount(name, email, password)
         }
     }
 
-    private fun validatedUserInput(): Boolean {
+    private fun validatedUserInput(name: String, email: String, password: String): Boolean {
         return when {
-            TextUtils.isEmpty(binding.edtName.text) -> {
+            TextUtils.isEmpty(name) -> {
                 showToast("empty name field")
                 false
             }
-            TextUtils.isEmpty(binding.edtEmail.text) -> {
+            TextUtils.isEmpty(email) -> {
                 showToast("empty email field")
                 false
             }
-            TextUtils.isEmpty(binding.edtPassword.text) -> {
+            TextUtils.isEmpty(password) -> {
                 showSnackBar("empty password field")
                 false
             }
@@ -52,7 +54,22 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>() {
         }
     }
 
-    private fun signUpAccount() {
-        showToast("Signing up user account to Firebase")
+    private fun signUpAccount(name: String, email: String, password: String) {
+        showLoadingDialog()
+        FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                hideDialog()
+                if (task.isSuccessful) {
+                    val firebaseUser = task.result.user!!
+                    val registeredEmail = firebaseUser.email!!
+                    showToast("Hi $name, you have registered successfully via $registeredEmail")
+                } else {
+                    showToast("error during signing up")
+                }
+            }
+            .addOnFailureListener {
+                showToast(it.message ?: "exception during signing up")
+            }
     }
 }
